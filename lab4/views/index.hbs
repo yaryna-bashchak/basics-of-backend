@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Weather</title>
+    <link rel="stylesheet" href="/style.css">
 </head>
 <script>
   function getLocation() {
@@ -29,6 +30,7 @@
   window.onload = getLocation;
 </script>
 <body>
+  <div class="container">
     <h1>Select a city:</h1>
     <ul>
         <li><a href="#" id="current-location-link" onclick="getLocation()">My location</a></li>
@@ -38,5 +40,6 @@
         <li><a href="/weather/odesa">Odesa</a></li>
         <li><a href="/weather/cherkasy">Cherkasy</a></li>
     </ul>
+  </div>
 </body>
 </html>

@@ -5,6 +5,7 @@ const PORT = 3000
 
 app.set('view engine', 'hbs')
 app.set('views', __dirname + '/views')
+app.use(express.static('public'));
 
 app.get('/', (req, res) => {
   res.send('Hello, Express')
