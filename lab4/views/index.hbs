@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="uk">
 <head>
     <meta charset="UTF-8">
     <title>Погода</title>
@@ -7,10 +7,32 @@
 <body>
     <h1>Виберіть місто</h1>
     <ul>
-        <li><a href="/weather/kyiv">Київ</a></li>
-        <li><a href="/weather/lviv">Львів</a></li>
-        <li><a href="/weather/odesa">Одеса</a></li>
+        <li><a href="#" id="current-location-link" onclick="getLocation()">Моє місцезнаходження</a></li>
         <li><a href="/weather/my_location">Моє місцезнаходження</a></li>
+        <li><a href="/weather/Київ">Київ</a></li>
+        <li><a href="/weather/Львів">Львів</a></li>
+        <li><a href="/weather/Тернопіль">Тернопіль</a></li>
+        <li><a href="/weather/Одеса">Одеса</a></li>
+        <li><a href="/weather/Черкаси">Черкаси</a></li>
     </ul>
 </body>
+<script>
+  function getLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(showPosition);
+    } else { 
+      alert("Геолокація не підтримується цим браузером.");
+    }
+  }
+
+  function showPosition(position) {
+    const latitude = position.coords.latitude;
+    const longitude = position.coords.longitude;
+    const locationLink = `/weather/current?lat=${latitude}&lon=${longitude}`;
+    document.getElementById("current-location-link").href = locationLink;
+    document.getElementById("current-location-link").textContent = "Моє місцезнаходження";
+  }
+
+  window.onload = getLocation;
+</script>
 </html>
