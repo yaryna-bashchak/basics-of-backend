@@ -11,7 +11,7 @@ app.get('/', (req, res) => {
 })
 
 app.listen(PORT, () => {
-  console.log(`Сервер запущено на порту ${PORT}`)
+  console.log(`The server is started on the port ${PORT}`)
 })
 
 app.get('/weather', (req, res) => {
@@ -26,16 +26,12 @@ app.get('/weather/current', async (req, res) => {
   try {
     const response = await axios.get(url)
     const { data } = response
-    res.render('city_weather', {
-      city: data.name,
-      temperature: data.main.temp,
-      description: data.weather[0].description,
-      humidity: data.main.humidity,
-      pressure: data.main.pressure
-    })
+    res.json({
+      city: data.name
+    });
   } catch (error) {
     console.error(error)
-    res.send(`Помилка при отриманні даних про погоду: ${error}`)
+    res.status(500).send(`Error getting weather data: ${error}`)
   }
 })
 
@@ -48,13 +44,13 @@ app.get('/weather/:city', async (req, res) => {
     const response = await axios.get(url)
     const { weather, main } = response.data
     res.render('city_weather', {
-      city: city,
+      city: city.charAt(0).toUpperCase() + city.slice(1),
       temperature: main.temp,
       description: weather[0].description,
       humidity: main.humidity,
       pressure: main.pressure
     })
   } catch (error) {
-    res.send(`Помилка при отриманні даних про погоду: ${error}`)
+    res.send(`Error getting weather data: ${error}`)
   }
 })
