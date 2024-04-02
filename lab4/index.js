@@ -43,7 +43,7 @@ app.get('/weather/:city', async (req, res) => {
   try {
     const response = await axios.get(url)
     const { weather, main } = response.data
-    res.render('city_weather', {
+    res.render('weather', {
       city: city.charAt(0).toUpperCase() + city.slice(1),
       temperature: main.temp,
       description: weather[0].description,
