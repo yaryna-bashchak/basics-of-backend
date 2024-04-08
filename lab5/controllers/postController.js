@@ -1,64 +1,69 @@
-const Post = require('../models/Post');
+const Post = require('../models/Post')
+
+// Отримання всіх постів і відображення у вигляді списку
+exports.getAllPosts = async (req, res) => {
+  try {
+    const posts = await Post.find({})
+    res.render('postsList', { posts: posts })
+  } catch (err) {
+    res.status(500).send({ message: err.message })
+  }
+}
+
+// Відображення сторінки для додавання нового посту
+exports.addPostPage = (req, res) => {
+  res.render('addPost')
+}
 
 // Створення нового посту
 exports.createPost = async (req, res) => {
+  const { title, author, text } = req.body
   try {
-    const newPost = new Post(req.body);
-    const savedPost = await newPost.save();
-    res.status(201).json(savedPost);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
+    await Post.create({ title, author, text })
+    res.redirect('/posts')
+  } catch (err) {
+    res.status(500).send({ message: err.message })
   }
-};
+}
 
-// Отримання всіх постів
-exports.getAllPosts = async (req, res) => {
+// Відображення сторінки для редагування посту
+exports.editPostPage = async (req, res) => {
   try {
-    const posts = await Post.find();
-    res.status(200).json(posts);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+    const post = await Post.findById(req.params.id)
+    res.render('editPost', { post })
+  } catch (err) {
+    res.status(404).send({ message: 'Post not found' })
   }
-};
+}
 
-// Отримання одного посту по ID
-exports.getPostById = async (req, res) => {
+// Оновлення посту
+exports.updatePost = async (req, res) => {
+  const { title, author, text } = req.body
   try {
     const post = await Post.findById(req.params.id);
-    if (post) {
-      res.status(200).json(post);
-    } else {
-      res.status(404).json({ message: "Post not found" });
-    }
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
 
-// Оновлення посту по ID
-exports.updatePost = async (req, res) => {
-  try {
-    const updatedPost = await Post.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if (updatedPost) {
-      res.status(200).json(updatedPost);
-    } else {
-      res.status(404).json({ message: "Post not found" });
+    if (!post) {
+      return res.status(404).send({ message: "Post not found" });
     }
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-};
 
-// Видалення посту по ID
+    post.title = title;
+    post.author = author;
+    post.text = text;
+    post.updatedAt = new Date();
+
+    await post.save();
+    res.redirect('/posts')
+  } catch (err) {
+    res.status(500).send({ message: err.message })
+  }
+}
+
+// Видалення посту
 exports.deletePost = async (req, res) => {
   try {
-    const deletedPost = await Post.findByIdAndDelete(req.params.id);
-    if (deletedPost) {
-      res.status(200).json({ message: "Post deleted successfully" });
-    } else {
-      res.status(404).json({ message: "Post not found" });
-    }
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+    await Post.findOneAndDelete({ _id: req.params.id })
+    res.redirect('/posts')
+  } catch (err) {
+    res.status(500).send({ message: err.message })
   }
-};
+}
