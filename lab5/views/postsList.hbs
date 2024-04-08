@@ -1,0 +1,16 @@
+<h1>Posts</h1>
+<ul>
+    {{#each posts}}
+        <li>
+            <strong>Title:</strong> {{this.title}}<br>
+            <strong>Author:</strong> {{this.author}}<br>
+            <strong>Text:</strong> {{this.text}}<br>
+            <strong>Created At:</strong> {{formatDate this.createdAt "MMMM Do YYYY, h:mm:ss a"}}<br>
+            <strong>Last Updated:</strong> {{formatDate this.updatedAt "MMMM Do YYYY, h:mm:ss a"}}<br>
+            <a href="/posts/edit/{{this._id}}">Edit</a> | 
+            <a href="/posts/delete/{{this._id}}" onclick="return confirm('Are you sure?');">Delete</a>
+        </li>
+    {{/each}}
+</ul>
+<a href="/posts/add">Add New Post</a>
+
