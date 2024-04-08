@@ -8,5 +8,6 @@ router.get('/edit/:id', postController.editPostPage);
 router.post('/add', postController.createPost);
 router.post('/edit/:id', postController.updatePost);
 router.get('/delete/:id', postController.deletePost);
+router.get('/json', postController.getPostsJson);
 
 module.exports = router;

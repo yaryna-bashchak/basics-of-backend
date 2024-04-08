@@ -67,3 +67,13 @@ exports.deletePost = async (req, res) => {
     res.status(500).send({ message: err.message })
   }
 }
+
+// Отримання всіх постів у json форматі
+exports.getPostsJson = async (req, res) => {
+  try {
+    const posts = await Post.find({}).lean();
+    res.json(posts);
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+};
