@@ -1,8 +1,14 @@
+// nodemon -e js,hbs,json server.js
+// localhost:3000/posts
+
 const express = require('express')
 const mongoose = require('mongoose')
 const { engine } = require('express-handlebars')
 const postRoutes = require('./routes/postRoutes')
 const moment = require('moment')
+const { graphqlHTTP } = require('express-graphql');
+const schema = require('./graphql/schema');
+const resolvers = require('./graphql/resolvers');
 const app = express()
 const port = 3000
 
@@ -26,6 +32,12 @@ app.set('views', './views')
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use('/posts', postRoutes)
+
+app.use('/graphql', graphqlHTTP({
+  schema: schema,
+  rootValue: resolvers,
+  graphiql: true,
+}));
 
 mongoose
   .connect(
